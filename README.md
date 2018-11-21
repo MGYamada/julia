@@ -1,13 +1,13 @@
-# julia
+# Marcov Chain Monte Carlo in Julia
 
-1. ./mcmc1.ipynb   MCMC1:   Basics
-1. ./mcmc1.5.ipynb MCMC1.5: How to Plot
-1. ./mcmc2.ipynb   MCMC2:   Iterators and Generators
-1. ./mcmc2.5.ipynb MCMC2.5: Dense and Sparse Matrices
-1. ./mcmc3.ipynb   MCMC3:   Kitaev Model
-1. ./mcmc3.5.ipynb MCMC3.5: Jackknife Resampling
-1. ./mcmc4.ipynb   MCMC4:   Replica Exchange Monte Carlo
-1. ./mcmc4.5.jl    MCMC4.5: MPI and Parallelization
-1. ./mcmc5.ipynb   MCMC5:   Exact Diagonalization
+1. [MCMC1.0](./mcmc1.ipynb): Basics
+1. [MCMC1.5](./mcmc1.5.ipynb): How to Plot
+1. [MCMC2.0](./mcmc2.ipynb): Iterators and Generators
+1. [MCMC2.5](./mcmc2.5.ipynb): Dense and Sparse Matrices
+1. [MCMC3.0](./mcmc3.ipynb): Kitaev Model
+1. [MCMC3.5](./mcmc3.5.ipynb): Jackknife Resampling
+1. [MCMC4.0](./mcmc4.ipynb): Replica Exchange Monte Carlo
+1. MCMC4.5(./mcmc4.5.jl): MPI and Parallelization
+1. [MCMC5](./mcmc5.ipynb):   Exact Diagonalization
 
 Half-integer sections are for supporting integer sections. You can skip half-integers if they are not necessary.
