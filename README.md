@@ -1,3 +1,4 @@
 # julia
 
-I am practicing Julia now. Please wait for a while to have enough contents.
+1. mcmc1.ipynb
+1. mcmc1.ipynb
