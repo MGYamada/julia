@@ -15,4 +15,4 @@ Currently I am using Julia 1.0.2.
 1. [MCMC6.0](./mcmc6.ipynb): Hubbard Model
 1. [MCMC6.5](./mcmc6.5.ipynb): Self-Learning Monte Carlo
 
-Half-integer sections are for supporting integer sections. You can skip half-integers if they are not necessary.
+Half-integer sections are supporting integer sections. You can skip half-integers if they are not necessary.
