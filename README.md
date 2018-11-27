@@ -2,7 +2,8 @@
 
 Currently I am using Julia 1.0.2.
 
-1. [MCMC1.0](./mcmc1.ipynb): Introduction
+1. MCMC0.5(./mcmc0.5.ipynb): Functional Programming
+1. [MCMC1.0](./mcmc1.ipynb): Introduction to MCMC
 1. [MCMC1.5](./mcmc1.5.ipynb): How to Plot
 1. [MCMC2.0](./mcmc2.ipynb): Iterators and Generators
 1. [MCMC2.5](./mcmc2.5.ipynb): Dense and Sparse Matrices
