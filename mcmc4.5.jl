@@ -55,7 +55,7 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
         βF = 0.0
         β₂ = β * 0.5
         hdense = Array(h)
-        ev = zeros(Float64, N)
+        posev = zeros(Float64, N >> 1)
         step = 0
         while true
             MPI.Barrier(comm) # for your safety
@@ -66,9 +66,9 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
                 MPI.Recv!(ηnew, 0, 4step, comm)
                 MPI.Send(η, 0, 4step + 1, comm)
             end
-            for (j, x) in enumerate(ηnew)
-                h[NNz[j][1], NNz[j][2]] = 0.5im * Jz * x
-                h[NNz[j][2], NNz[j][1]] = -0.5im * Jz * x
+            for (j, σ) in enumerate(ηnew)
+                h[NNz[j][1], NNz[j][2]] = 0.5im * Jz * σ
+                h[NNz[j][2], NNz[j][1]] = -0.5im * Jz * σ
             end
             evnew = eigvals(Hermitian(Array(h)))
             iter = Iterators.drop(evnew, N >> 1)
@@ -81,7 +81,7 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
                 if isaccepted[1] == 1
                     η .= ηnew
                     βF = βFnew
-                    ev .= evnew
+                    posev = collect(iter)
                     hdense = Array(h)
                 end
             elseif rank == 1
@@ -91,7 +91,7 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
                     MPI.Send([1], 0, 4step + 3, comm)
                     η .= ηnew
                     βF = βFnew
-                    ev .= evnew
+                    posev = collect(iter)
                     hdense = Array(h)
                 else
                     MPI.Send([0], 0, 4step + 3, comm)
@@ -109,14 +109,14 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
                 if method(βF, βFnew)
                     η[j] = -η[j]
                     βF = βFnew
-                    ev .= evnew
+                    posev = collect(iter)
                 else
                     hdense[NNz[j][1], NNz[j][2]] = -hdense[NNz[j][1], NNz[j][2]]
                     hdense[NNz[j][2], NNz[j][1]] = -hdense[NNz[j][2], NNz[j][1]]
                 end
             end
-            Ef = -0.5 * mapreduce(energy(β₂), +, ev[(N >> 1 + 1) : end])
-            ∂Ef∂β = -0.25 * mapreduce(denergy(β₂), +, ev[(N >> 1 + 1) : end])
+            Ef = -0.5 * mapreduce(energy(β₂), +, posev)
+            ∂Ef∂β = -0.25 * mapreduce(denergy(β₂), +, posev)
             put!(channel, [Ef, ∂Ef∂β])
         step += 1
         end
