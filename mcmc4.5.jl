@@ -50,20 +50,21 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
         end
         NNz = collect(nnz)
         Nz = length(NNz)
-        η = ones(Int64, Nz) # BitArray does not work in MPI, Vector{Bool} also works
+        η = ones(Int64, Nz) # BitArray does not work in MPI
         ηnew = similar(η)
         βF = 0.0
         β₂ = β * 0.5
         hdense = Array(h)
         ev = zeros(Float64, N)
+        step = 0
         while true
-            MPI.Barrier(comm)
+            MPI.Barrier(comm) # for your safety
             if rank == 0
-                MPI.Send(η, 1, 1, comm)
-                MPI.Recv!(ηnew, 1, 0, comm)
+                MPI.Send(η, 1, 4step, comm)
+                MPI.Recv!(ηnew, 1, 4step + 1, comm)
             elseif rank == 1
-                MPI.Send(η, 0, 0, comm)
-                MPI.Recv!(ηnew, 0, 1, comm)
+                MPI.Recv!(ηnew, 0, 4step, comm)
+            MPI.Send(η, 0, 4step + 1, comm)
             end
             for (j, x) in enumerate(ηnew)
                 h[NNz[j][1], NNz[j][2]] = 0.5im * Jz * x
@@ -72,11 +73,12 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
             evnew = eigvals(Hermitian(Array(h)))
             iter = Iterators.drop(evnew, N >> 1)
             βFnew = -mapreduce(freeenergy(β₂), +, iter)
+            MPI.Barrier(comm) # for your safety
             if rank == 0
-                MPI.Send([βF - βFnew], 1, 1, comm)
-                isaccepted = [false]
-                MPI.Recv!(isaccepted, 1, 0, comm)
-                if isaccepted[1]
+                MPI.Send([βF - βFnew], 1, 4step + 2, comm)
+                isaccepted = [0]
+                MPI.Recv!(isaccepted, 1, 4step + 3, comm)
+                if isaccepted[1] == 1
                     η .= ηnew
                     βF = βFnew
                     ev .= evnew
@@ -84,18 +86,18 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
                 end
             elseif rank == 1
                 diff = [0.0]
-                MPI.Recv!(diff, 0, 1, comm)
+                MPI.Recv!(diff, 0, 4step + 2, comm)
                 if simpleMetropolis(βF - βFnew + diff[1])
-                    MPI.Send([true], 0, 0, comm)
+                    MPI.Send([1], 0, 4step + 3, comm)
                     η .= ηnew
                     βF = βFnew
                     ev .= evnew
                     hdense = Array(h)
                 else
-                    MPI.Send([false], 0, 0, comm)
+                    MPI.Send([0], 0, 4step + 3, comm)
                 end
             end
-            MPI.Barrier(comm)
+            MPI.Barrier(comm) # for your safety
 
             for i in 1 : Nz
                 j = rand(1 : Nz)
@@ -116,6 +118,7 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
             Ef = -0.5 * mapreduce(energy(β₂), +, ev[(N >> 1 + 1) : end])
             ∂Ef∂β = -0.25 * mapreduce(denergy(β₂), +, ev[(N >> 1 + 1) : end])
             put!(channel, [Ef, ∂Ef∂β])
+        step += 1
         end
     end
 end
