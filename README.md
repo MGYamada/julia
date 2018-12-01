@@ -16,7 +16,7 @@ Currently I am using Julia 1.0.2.
 1. [MCMC6.0](./mcmc6.0.ipynb): Hubbard Model
 1. [MCMC6.5](./mcmc6.5.ipynb): Self-Learning Monte Carlo
 1. MCMC7.0(./mcmc7.0.ipynb): Continuous-Time Formalism
-1. MCMC7.5(./mcmc7.5.ipynb):
+1. MCMC7.5(./mcmc7.5.ipynb): Linear Maps and Dirac Operators (?)
 1. MCMC8.0(./mcmc8.0.ipynb): Super Yang-Mills Theory
 
 Half-integer sections are supporting integer sections. You can skip half-integers if they are not necessary.
