@@ -64,7 +64,7 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
                 MPI.Recv!(ηnew, 1, 4step + 1, comm)
             elseif rank == 1
                 MPI.Recv!(ηnew, 0, 4step, comm)
-            MPI.Send(η, 0, 4step + 1, comm)
+                MPI.Send(η, 0, 4step + 1, comm)
             end
             for (j, x) in enumerate(ηnew)
                 h[NNz[j][1], NNz[j][2]] = 0.5im * Jz * x
