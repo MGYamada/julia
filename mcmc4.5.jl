@@ -14,7 +14,7 @@ end
 function openhoneycomb(Lx::Int64, Ly::Int64)::Tuple
     N = 2Lx * Ly
     nnx = zip(1 : 2 : (N - 1), 2 : 2 : N)
-    nny = Iterators.flatten(zip((1 + 2i) : 2Lx : (2Lx * (Ly - 1)  + 1 + 2i), 2i : 2Lx : (2Lx * (Ly - 1)  + 2i)) for i in 1 : (Lx - 1))
+    nny = Iterators.flatten((zip((1 + 2i) : 2Lx : (2Lx * (Ly - 1)  + 1 + 2i), 2i : 2Lx : (2Lx * (Ly - 1)  + 2i)) for i in 1 : (Lx - 1)))
     nnz = zip(1 : 2 : (N - 1), Iterators.flatten(((2Lx + 2) : 2 : N, 2 : 2 : 2Lx)))
     plaquette = Iterators.flatten(zip((Lx * (i - 1) + 1) : (Lx * (i - 1) + Lx - 1), (Lx * (i - 1) + 2) : (Lx * (i - 1) + Lx)) for i in 1 : Ly)
     N, nnx, nny, nnz, plaquette
