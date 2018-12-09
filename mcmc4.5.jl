@@ -6,10 +6,10 @@ const Jx = 1 / 3
 const Jy = 1 / 3
 const Jz = 1 / 3
 function Metropolis(βF::Float64, βFnew::Float64)::Bool
-    βF - βFnew > log(rand())
+    βF - βFnew > log(1.0 - rand())
 end
 function simpleMetropolis(Δlogp::Float64)::Bool
-    Δlogp > log(rand())
+    Δlogp > log(1.0 - rand())
 end
 function openhoneycomb(Lx::Int64, Ly::Int64)::Tuple
     N = 2Lx * Ly
@@ -45,8 +45,8 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
         iter = Iterators.flatten((Iterators.product(J, nn) for (J, nn) in [(Jx, nnx), (Jy, nny), (Jz, nnz)]))
         h = spzeros(Complex{Float64}, N, N)
         for (J, nn) in iter
-            h[nn[1], nn[2]] = 0.5im * J
-            h[nn[2], nn[1]] = -0.5im * J
+            h[nn[1], nn[2]] = 2.0im * J
+            h[nn[2], nn[1]] = -2.0im * J
         end
         NNz = collect(nnz)
         Nz = length(NNz)
@@ -67,12 +67,12 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
                 MPI.Send(η, 0, 4step + 1, comm)
             end
             for (j, σ) in enumerate(ηnew)
-                h[NNz[j][1], NNz[j][2]] = 0.5im * Jz * σ
-                h[NNz[j][2], NNz[j][1]] = -0.5im * Jz * σ
+                h[NNz[j][1], NNz[j][2]] = 2.0im * Jz * σ
+                h[NNz[j][2], NNz[j][1]] = -2.0im * Jz * σ
             end
             evnew = eigvals(Hermitian(Array(h)))
             iter = Iterators.drop(evnew, N >> 1)
-            βFnew = -mapreduce(freeenergy(β₂), +, iter)
+            βFnew = -sum(freeenergy(β₂), iter)
             MPI.Barrier(comm) # for your safety
             if rank == 0
                 MPI.Send([βF - βFnew], 1, 4step + 2, comm)
@@ -105,7 +105,7 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
                 hdense[NNz[j][2], NNz[j][1]] = -hdense[NNz[j][2], NNz[j][1]]
                 evnew = eigvals(Hermitian(hdense))
                 iter = Iterators.drop(evnew, N >> 1)
-                βFnew = -mapreduce(freeenergy(β₂), +, iter)
+                βFnew = -sum(freeenergy(β₂), iter)
                 if method(βF, βFnew)
                     η[j] = -η[j]
                     βF = βFnew
@@ -115,8 +115,8 @@ function measurement(comm::MPI.Comm, rank::Int64, method::Function, lattice::Fun
                     hdense[NNz[j][2], NNz[j][1]] = -hdense[NNz[j][2], NNz[j][1]]
                 end
             end
-            Ef = -0.5 * mapreduce(energy(β₂), +, posev)
-            ∂Ef∂β = -0.25 * mapreduce(denergy(β₂), +, posev)
+            Ef = -0.5 * sum(energy(β₂), posev)
+            ∂Ef∂β = -0.25 * sum(denergy(β₂), posev)
             put!(channel, [Ef, ∂Ef∂β])
         step += 1
         end
@@ -134,10 +134,8 @@ MPI.Init()
 comm = MPI.COMM_WORLD
 size = MPI.Comm_size(comm)
 rank = MPI.Comm_rank(comm)
-# sleep(0.001 * rank)
-# println("size = $size, rank = $rank")
 if size == 2
-    β = [150.0, 300.0][rank + 1]
+    β = [50.0, 100.0][rank + 1]
     m, s = replica(comm, rank, Metropolis, openhoneycomb, β, 4, 4)
     println("rank = $rank, β = $β, Cv(β) = $m ± $s")
 else
