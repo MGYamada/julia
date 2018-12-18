@@ -6,10 +6,10 @@ const Jx = 1 / 3
 const Jy = 1 / 3
 const Jz = 1 / 3
 function Metropolis(βF::Float64, βFnew::Float64)::Bool
-    βF - βFnew > log(1.0 - rand())
+    βF - βFnew > log(rand())
 end
 function simpleMetropolis(Δlogp::Float64)::Bool
-    Δlogp > log(1.0 - rand())
+    Δlogp > log(rand())
 end
 function openhoneycomb(Lx::Int64, Ly::Int64)::Tuple
     N = 2Lx * Ly
