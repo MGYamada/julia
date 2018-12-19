@@ -1,7 +1,8 @@
 # Marcov Chain Monte Carlo in Julia
 
 The contents include not only Marcov chain Monte Carlo and its applications to physics, but also modern programming, statistical processing, Bayesian statistics, machine learning, and sparse modeling.
-Currently I am using Julia 1.0.2, but I think it is easy to port them to Python.
+All the codes are written from a modern perspective. No spaghetti is included.
+Currently I am using Julia 1.0.3, but I think it is easy to port them to Python.
 
 1. [MCMC0.5](./mcmc0.5.ipynb): Functional Programming
 1. [MCMC1.0](./mcmc1.0.ipynb): Introduction to MCMC
