@@ -4,6 +4,8 @@ The contents include not only Marcov chain Monte Carlo and its applications to p
 All the codes are written from a modern perspective. No spaghetti is included.
 Currently I am using Julia 1.0.3, but I think it is easy to port them to Python.
 
+If you are willing to try the code just copy and paste to JuliaBox https://juliabox.com/ on your browser.
+
 1. [MCMC0.5](./mcmc0.5.ipynb): Functional Programming
 1. [MCMC1.0](./mcmc1.0.ipynb): Introduction to MCMC
 1. [MCMC1.5](./mcmc1.5.ipynb): How to Plot
