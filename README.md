@@ -28,4 +28,3 @@ If you are willing to try the code just copy and paste to JuliaBox https://julia
 1. MCMC10.0(./mcmc10.0.ipynb): Super Yang-Mills Theory
 
 Half-integer sections are supporting integer sections. You can skip half-integers if they are not necessary.
-Special thanks to S. Sugiura.
