@@ -2,7 +2,7 @@
 
 The contents include not only Marcov chain Monte Carlo and its applications to physics, but also modern programming, statistical processing, Bayesian statistics, machine learning, and sparse modeling.
 All the codes are written from a modern perspective. No spaghetti is included.
-Currently I am using Julia 1.1.0, but I think it is easy to port them to Python.
+Currently I am using Julia 1.4.0, but I think it is easy to port them to Python.
 
 If you are willing to try the code just copy and paste to JuliaBox https://juliabox.com/ on your browser.
 
@@ -21,10 +21,10 @@ If you are willing to try the code just copy and paste to JuliaBox https://julia
 1. [MCMC6.5](./mcmc6.5.ipynb): Self-Learning Monte Carlo (?)
 1. [MCMC7.0](./mcmc7.0.ipynb): Continuous-Time Formalism
 1. [MCMC7.5](./mcmc7.5.ipynb): Sparse Modeling and Analytic Continuation
-1. MCMC8.0(./mcmc8.0.ipynb): Determinant Monte Carlo with Spin Density Wave
+1. MCMC8.0(./mcmc8.0.ipynb): Kernel Polynomial Method and Kitaev Model Revisited
 1. MCMC8.5(./mcmc8.5.ipynb): Heisenberg Model
 1. MCMC9.0(./mcmc9.0.ipynb): Stochastic Series Expansion and Quantum Wang-Landau Resampling
-1. MCMC9.5(./mcmc9.5.ipynb): Linear Maps and Dirac Operators (?)
-1. MCMC10.0(./mcmc10.0.ipynb): Super Yang-Mills Theory
+1. MCMC9.5(./mcmc9.5.ipynb): Linear Maps and Dirac Operators (Introduction to the lattice gauge theory)
+1. MCMC10.0(./mcmc10.0.ipynb): Determinant Monte Carlo with Spin Density Wave
 
 Half-integer sections are supporting integer sections. You can skip half-integers if they are not necessary.
